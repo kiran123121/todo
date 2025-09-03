@@ -1,17 +1,14 @@
-# Use a small JDK image
-FROM eclipse-temurin:17-jdk-alpine
+# Use official Java 17 runtime as base
+FROM eclipse-temurin:17-jdk
 
-# Set workdir
+# Set working directory
 WORKDIR /app
 
-# Copy pom and source
-COPY . .
+# Copy the JAR built by Maven (correct filename here!)
+COPY target/TodoApplication-1-0.0.1-SNAPSHOT.jar app.jar
 
-# Build the app (requires Maven wrapper or Maven installed in container)
-RUN ./mvnw clean package -DskipTests
-
-# Expose Render's port
+# Expose port (Render will provide PORT dynamically)
 EXPOSE 8080
 
-# Run the app (replace with your actual jar name if different)
-CMD ["java", "-jar", "target/todo-0.0.1-SNAPSHOT.jar"]
+# Run the JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]
